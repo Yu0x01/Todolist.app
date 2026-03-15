@@ -62,7 +62,7 @@ struct ContentView: View {
 
             #if DEBUG
             HStack(spacing: 6) {
-                Text("v1.3")
+                Text("v1.4")
                     .font(.caption)
                     .foregroundColor(.gray)
                 debugToggleButton
@@ -135,16 +135,28 @@ struct ContentView: View {
     }
 
     // MARK: - Add Button (floating)
+    @ViewBuilder
     private var addButton: some View {
-        Button(action: { showAddView = true }) {
-            Image(systemName: "plus")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-                .padding()
-                .background(Color.orange)
-                .clipShape(Circle())
-                .shadow(radius: 5)
-                .padding(.bottom, 20)
+        if #available(iOS 26.0, *) {
+            Button(action: { showAddView = true }) {
+                Image(systemName: "plus")
+                    .font(.title.weight(.semibold))
+                    .frame(width: 56, height: 56)
+            }
+            .buttonStyle(.glassProminent)
+            .buttonBorderShape(.circle)
+            .padding(.bottom, 20)
+        } else {
+            Button(action: { showAddView = true }) {
+                Image(systemName: "plus")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.orange)
+                    .clipShape(Circle())
+                    .shadow(radius: 5)
+                    .padding(.bottom, 20)
+            }
         }
     }
 
@@ -169,7 +181,7 @@ struct ContentView: View {
             HStack(spacing: 12) {
                 Button("Test Notification") { scheduleTestNotification() }
                 Button("Print Console") {
-                    appendDebugLog("🧾 Console @ \(Date()) — \(todos.count) item(s)")
+                    appendDebugLog("Console @ \(Date()) — \(todos.count) item(s)")
                 }
             }
 
@@ -201,7 +213,7 @@ struct ContentView: View {
         todos[index].isCompleted = true
         saveData()
         #if DEBUG
-        appendDebugLog("✅ \(method): \(todos[index].title)")
+        appendDebugLog("\(method): \(todos[index].title)")
         #endif
     }
 
@@ -215,7 +227,7 @@ struct ContentView: View {
         }
         saveData()
         #if DEBUG
-        appendDebugLog("🗑 Removed \(originalIndices.count) item(s)")
+        appendDebugLog("rm \(originalIndices.count) item(s)")
         #endif
     }
 
@@ -230,7 +242,7 @@ struct ContentView: View {
            let decoded = try? JSONDecoder().decode([ToDoItem].self, from: data) {
             todos = decoded
             #if DEBUG
-            appendDebugLog("📦 Loaded \(todos.count) from UserDefaults")
+            appendDebugLog("Loaded \(todos.count) from UserDefaults")
             #endif
         }
     }
@@ -239,7 +251,7 @@ struct ContentView: View {
         if let encoded = try? JSONEncoder().encode(todos) {
             UserDefaults.standard.set(encoded, forKey: "ToDoItems")
             #if DEBUG
-            appendDebugLog("💾 Saved \(todos.count) item(s)")
+            appendDebugLog("Saved \(todos.count) item(s)")
             #endif
         }
     }
@@ -256,9 +268,9 @@ struct ContentView: View {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                appendDebugLog("❌ Notification Error: \(error.localizedDescription)")
+                appendDebugLog("Notification Error: \(error.localizedDescription)")
             } else {
-                appendDebugLog("🔔 Test notification scheduled")
+                appendDebugLog("Test notification scheduled")
             }
         }
     }

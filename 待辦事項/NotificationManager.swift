@@ -28,9 +28,9 @@ class NotificationManager {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("通知錯誤：\(error)")
+                print("UnknowError：\(error)")
             } else {
-                print("已排程通知：\(title) at \(date)")
+                print("NotificationSet：\(title) at \(date)")
             }
         }
     }
