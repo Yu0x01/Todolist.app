@@ -15,9 +15,9 @@ struct YourAppNameApp: App {
                 print("取得通知權限時發生錯誤：\(error.localizedDescription)")
             } else {
                 if granted {
-                    print("✅ 使用者已允許通知")
+                    print("使用者已允許通知")
                 } else {
-                    print("❌ 使用者拒絕通知權限")
+                    print("使用者拒絕通知權限")
                 }
             }
         }
